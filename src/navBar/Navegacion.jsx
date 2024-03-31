@@ -47,16 +47,15 @@ function Navegacion() {
               </Link>
             </li>
             <li className="nav-item dropdown">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
-                role="button"
                 data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
+                to="/userConsult"
               >
                 Gestionar usuarios
-              </a>
+              </Link>
             </li>
             <li className="nav-item dropdown">
               <Link
@@ -70,16 +69,15 @@ function Navegacion() {
               </Link>
             </li>
             <li className="nav-item dropdown">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
-                role="button"
                 data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
+                to="/proyectConsult"
               >
-                Gestionar Proyectos
-              </a>
+                Gestionar proyectos
+              </Link>
             </li>
             <form method="post" action="Identity/Account/Logout">
               <span

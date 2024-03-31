@@ -10,6 +10,9 @@ import Dashboard from "./components/Dashboard";
 import UserForm from "./components/forms/UserForm";
 import ProyectForm from "./components/forms/ProyectForm";
 import TaskFrom from "./components/forms/TaskForm";
+import UserConsult from "./components/consult/UserConsult";
+import ProyectConsult from "./components/consult/ProyectConsult";
+import TaskConsult from "./components/consult/TaskConsult";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -20,6 +23,9 @@ root.render(
       <Route path="/userForm" element={<UserForm />} />
       <Route path="/proyectForm" element={<ProyectForm />} />
       <Route path="/taskForm" element={<TaskFrom />} />
+      <Route path="/userConsult" element={<UserConsult />} />
+      <Route path="/proyectConsult" element={<ProyectConsult />} />
+      <Route path="/taskConsult" element={<TaskConsult />} />
     </Routes>
   </BrowserRouter>
 );
