@@ -7,7 +7,9 @@ import reportWebVitals from "./reportWebVitals";
 
 import Navegacion from "./navBar/Navegacion";
 import Dashboard from "./components/Dashboard";
-import UserForm from "./components/UserForm";
+import UserForm from "./components/forms/UserForm";
+import ProyectForm from "./components/forms/ProyectForm";
+import TaskFrom from "./components/forms/TaskForm";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,6 +18,8 @@ root.render(
     <Routes>
       <Route path="/" element={<Dashboard />} />
       <Route path="/userForm" element={<UserForm />} />
+      <Route path="/proyectForm" element={<ProyectForm />} />
+      <Route path="/taskForm" element={<TaskFrom />} />
     </Routes>
   </BrowserRouter>
 );

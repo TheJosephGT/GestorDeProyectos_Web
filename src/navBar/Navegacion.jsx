@@ -59,16 +59,15 @@ function Navegacion() {
               </a>
             </li>
             <li className="nav-item dropdown">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
-                role="button"
                 data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
+                to="/proyectForm"
               >
-                Registrar Proyectos
-              </a>
+                Registrar proyectos
+              </Link>
             </li>
             <li className="nav-item dropdown">
               <a
