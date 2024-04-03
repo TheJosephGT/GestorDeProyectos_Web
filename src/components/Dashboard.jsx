@@ -94,14 +94,6 @@ function Dashboard() {
             <div className="col-sm-6">
               <h1>Projects</h1>
             </div>
-            <div className="col-sm-6">
-              <ol className="breadcrumb float-sm-right">
-                <li className="breadcrumb-item">
-                  <a href="#">Home</a>
-                </li>
-                <li className="breadcrumb-item active">Projects</li>
-              </ol>
-            </div>
           </div>
         </div>
       </section>
@@ -147,14 +139,12 @@ function Dashboard() {
                 <tr>
                   <td>#</td>
                   <td>
-                    <a>AdminLTE v3</a>
-                    <br />
-                    <small>Created 01.01.2019</small>
+                    <a style={{ fontSize: 18 }}>Nombre Proyecto</a>
                   </td>
                   <td>
                     <ul className="list-inline">
                       <li className="list-inline-item">
-                        <h2>Created 01.01.2019</h2>
+                        <a style={{ fontSize: 18 }}>Created 01.01.2019</a>
                       </li>
                     </ul>
                   </td>
@@ -192,14 +182,12 @@ function Dashboard() {
                 <tr>
                   <td>#</td>
                   <td>
-                    <a>AdminLTE v3</a>
-                    <br />
-                    <small>Created 01.01.2019</small>
+                    <a style={{ fontSize: 18 }}>Nombre Proyecto</a>
                   </td>
                   <td>
                     <ul className="list-inline">
                       <li className="list-inline-item">
-                        <h2>Created 01.01.2019</h2>
+                        <a style={{ fontSize: 18 }}>Created 01.01.2019</a>
                       </li>
                     </ul>
                   </td>
@@ -211,7 +199,7 @@ function Dashboard() {
                         aria-valuenow={57}
                         aria-valuemin={0}
                         aria-valuemax={100}
-                        style={{ width: "30%" }}
+                        style={{ width: "57%" }}
                       ></div>
                     </div>
                     <small>57% Complete</small>
@@ -237,14 +225,12 @@ function Dashboard() {
                 <tr>
                   <td>#</td>
                   <td>
-                    <a>AdminLTE v3</a>
-                    <br />
-                    <small>Created 01.01.2019</small>
+                    <a style={{ fontSize: 18 }}>Nombre Proyecto</a>
                   </td>
                   <td>
                     <ul className="list-inline">
                       <li className="list-inline-item">
-                        <h2>Created 01.01.2019</h2>
+                        <a style={{ fontSize: 18 }}>Created 01.01.2019</a>
                       </li>
                     </ul>
                   </td>
