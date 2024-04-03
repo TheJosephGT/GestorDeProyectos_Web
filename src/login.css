@@ -1,0 +1,43 @@
+.padre {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.tamaño-imagen {
+  width: 100%;
+  height: 800px;
+  margin-top: 100px;
+}
+.estilo-profile {
+  border-radius: 50%;
+  height: 120px;
+  width: 120px;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.cajaTexto {
+  background-color: #cccccc40;
+  border-color: slategray;
+  border-radius: 30px;
+  width: 100%;
+  padding: 15px;
+  border-width: 0px;
+  margin-bottom: 20px;
+}
+.cajaTexto:focus {
+  outline: 1px solid cornflowerblue;
+  box-shadow: 0 0 10px cornflowerblue;
+}
+.btnForm {
+  background-color: #0d6efd;
+  border-color: slategray;
+  border-radius: 30px;
+  width: 100%;
+  padding: 15px;
+  border-width: 0px;
+  margin-bottom: 20px;
+  color: white;
+}

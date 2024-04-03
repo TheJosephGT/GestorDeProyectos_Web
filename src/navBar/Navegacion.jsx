@@ -1,7 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import appFirebase from "../credenciales";
+import { getAuth, signOut } from "firebase/auth";
+const auth = getAuth(appFirebase);
 
 function Navegacion() {
+  const navigate = useNavigate();
+  const cerrarSesionFunction = () => {
+    signOut(auth);
+    navigate("/login");
+  };
   return (
     <nav
       className="navbar navbar-expand-md navbar-dark"
@@ -31,7 +41,7 @@ function Navegacion() {
         >
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" to="/">
+              <Link className="nav-link active" to="/dashboard">
                 Inicio
               </Link>
             </li>
@@ -79,22 +89,20 @@ function Navegacion() {
                 Gestionar proyectos
               </Link>
             </li>
-            <form method="post" action="Identity/Account/Logout">
-              <span
-                className="nav-link"
-                onclick="this.parentNode.submit();"
-                style={{
-                  cursor: "pointer",
-                  position: "fixed",
-                  top: 10,
-                  right: 10,
+            <li className="nav-item dropdown">
+              <Link
+                onClick={() => {
+                  cerrarSesionFunction();
                 }}
+                className="nav-link"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                to="/login"
               >
                 Cerrar sesión
-                <span className="oi oi-account-logout" title="Cerrar sesión" />
-                <p />
-              </span>
-            </form>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
