@@ -41,7 +41,7 @@ function Navegacion() {
         >
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" to="/dashboard">
+              <Link className="nav-link active" to="/">
                 Inicio
               </Link>
             </li>
@@ -94,7 +94,7 @@ function Navegacion() {
                 onClick={() => {
                   cerrarSesionFunction();
                 }}
-                className="nav-link"
+                className="nav-link active"
                 data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"

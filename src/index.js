@@ -41,20 +41,23 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      {usuario && <Navegacion />}
       {usuario ? (
-        <Navigate to="/dashboard" replace />
+        <div>
+          <Navegacion />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/userForm" element={<UserForm />} />
+            <Route path="/proyectForm" element={<ProyectForm />} />
+            <Route path="/taskForm" element={<TaskFrom />} />
+            <Route path="/userConsult" element={<UserConsult />} />
+            <Route path="/proyectConsult" element={<ProyectConsult />} />
+            <Route path="/taskConsult" element={<TaskConsult />} />
+          </Routes>
+        </div>
       ) : (
         <Navigate to="/login" replace />
       )}
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/userForm" element={<UserForm />} />
-        <Route path="/proyectForm" element={<ProyectForm />} />
-        <Route path="/taskForm" element={<TaskFrom />} />
-        <Route path="/userConsult" element={<UserConsult />} />
-        <Route path="/proyectConsult" element={<ProyectConsult />} />
-        <Route path="/taskConsult" element={<TaskConsult />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>

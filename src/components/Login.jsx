@@ -18,7 +18,7 @@ function Login() {
       const usuario = await signInWithEmailAndPassword(auth, email, password);
       if (usuario) {
         console.log("Usuario logueado", usuario);
-        navigate("/dashboard");
+        navigate("/");
       } else {
         console.log("No se pudo loguear");
       }
