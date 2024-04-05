@@ -12,6 +12,7 @@ function Navegacion() {
     signOut(auth);
     navigate("/login");
   };
+
   return (
     <nav
       className="navbar navbar-expand-md navbar-dark"

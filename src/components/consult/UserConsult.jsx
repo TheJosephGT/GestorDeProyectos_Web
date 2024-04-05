@@ -48,18 +48,6 @@ function UserConsult() {
       sortable: true,
     },
     {
-      name: "Participantes",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-success btn-sm"
-          onClick={() => handleEdit(row)}
-        >
-          Ver
-        </button>
-      ),
-    },
-    {
       name: "Editar",
       button: true,
       cell: (row) => (
@@ -85,11 +73,6 @@ function UserConsult() {
     },
   ];
 
-  const handleEdit = (row) => {
-    // Lógica para editar el usuario
-    console.log("Editar usuario:", row);
-  };
-
   const handleDelete = async (id) => {
     try {
       await deleteUsuario(id);
@@ -107,12 +90,14 @@ function UserConsult() {
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
     const filteredData = usuarios.filter((item) => {
-      return (
-        item.nombreCompleto.toLowerCase().includes(searchValue) ||
-        item.nickName.toLowerCase().includes(searchValue) ||
-        item.rol.toLowerCase().includes(searchValue) ||
-        item.correo.toLowerCase().includes(searchValue)
-      );
+      if (item.activo === true) {
+        return (
+          item.nombreCompleto.toLowerCase().includes(searchValue) ||
+          item.nickName.toLowerCase().includes(searchValue) ||
+          item.rol.toLowerCase().includes(searchValue) ||
+          item.correo.toLowerCase().includes(searchValue)
+        );
+      }
     });
     setRecords(filteredData);
   }

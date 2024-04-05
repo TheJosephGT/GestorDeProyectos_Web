@@ -39,3 +39,38 @@ export const postProyect = async (proyect) => {
     throw error;
   }
 };
+
+export const putProyect = async (proyectoId, proyect) => {
+  try {
+    const requestBody = {
+      proyectoId: proyectoId,
+      titulo: String(proyect.titulo).trim(),
+      descripcion: String(proyect.descripcion).trim(),
+      estado: String(proyect.estado).trim(),
+      fechaCreacion: proyect.fechaCreacion,
+      progreso: parseInt(proyect.progreso),
+      activo: proyect.activo,
+      participantes: proyect.participantes,
+    };
+    const respuesta = await fetch(`${API_URL}/${proyectoId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
+    console.log(respuesta);
+    await respuesta.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteProyect = async (id) => {
+  try {
+    const respuesta = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
+    await respuesta.json();
+  } catch (error) {
+    console.log(error);
+  }
+};

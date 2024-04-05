@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { getProyects } from "../../Repositorys/ProyectRepository";
+import {
+  getProyects,
+  deleteProyect,
+} from "../../Repositorys/ProyectRepository";
+import { useNavigate } from "react-router-dom";
 
 function ProyectConsult() {
+  const navigate = useNavigate();
   const [proyectos, setProyectos] = useState([]);
   const [records, setRecords] = useState([]);
 
@@ -60,7 +65,7 @@ function ProyectConsult() {
       cell: (row) => (
         <button
           className="btn btn-primary btn-sm"
-          onClick={() => handleEdit(row)}
+          onClick={() => navigate(`/updateProyect/${row.proyectoId}`)}
         >
           Editar
         </button>
@@ -72,7 +77,7 @@ function ProyectConsult() {
       cell: (row) => (
         <button
           className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row)}
+          onClick={() => handleDelete(row.proyectoId)}
         >
           Eliminar
         </button>
@@ -85,9 +90,13 @@ function ProyectConsult() {
     console.log("Editar usuario:", row);
   };
 
-  const handleDelete = (row) => {
-    // Lógica para eliminar el usuario
-    console.log("Eliminar usuario:", row);
+  const handleDelete = async (id) => {
+    try {
+      await deleteProyect(id);
+      listProyects();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleViewParticipants = (row) => {
@@ -98,10 +107,12 @@ function ProyectConsult() {
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
     const filteredData = proyectos.filter((item) => {
-      return (
-        item.nombre?.toLowerCase().includes(searchValue) ||
-        item.descripcion?.toLowerCase().includes(searchValue)
-      );
+      if (item.activo === true) {
+        return (
+          item.nombre?.toLowerCase().includes(searchValue) ||
+          item.descripcion?.toLowerCase().includes(searchValue)
+        );
+      }
     });
     setRecords(filteredData);
   }
