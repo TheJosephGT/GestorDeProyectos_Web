@@ -1,12 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ModalProyect from "./ModalProyect";
 import React from "react";
+import { getProyects } from "../Repositorys/ProyectRepository";
 
 function Dashboard() {
   const [show, setShow] = useState(false);
+  const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [proyects, setProyects] = useState([]);
+
+  const listProyects = async () => {
+    try {
+      setProyects(await getProyects());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    listProyects();
+  }, []);
+
+  const handleShow = (id) => {
+    const proyectoActual = proyects.find(
+      (proyecto) => proyecto.proyectoId === id
+    );
+    setProyectoSeleccionado(proyectoActual);
+    setShow(true);
+  };
   return (
     <>
       {/* Content Header (Page header) */}
@@ -30,7 +51,7 @@ function Dashboard() {
                 {/* small box */}
                 <div className="small-box bg-info">
                   <div className="inner">
-                    <h3>150</h3>
+                    <h3>{proyects.length}</h3>
                     <p>Proyectos registrados</p>
                   </div>
                   <div className="icon">
@@ -114,7 +135,7 @@ function Dashboard() {
               <thead>
                 <tr>
                   <th style={{ width: "1%" }}>#</th>
-                  <th style={{ width: "20%" }}>Nombre Proyecto</th>
+                  <th style={{ width: "20%" }}>Titulo</th>
                   <th style={{ width: "30%" }}>Fecha</th>
                   <th>Progreso</th>
                   <th style={{ width: "8%" }} className="text-center">
@@ -124,58 +145,72 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#</td>
-                  <td>
-                    <a style={{ fontSize: 18 }}>Nombre Proyecto</a>
-                  </td>
-                  <td>
-                    <ul className="list-inline">
-                      <li className="list-inline-item">
-                        <a style={{ fontSize: 18 }}>Created 01.01.2019</a>
-                      </li>
-                    </ul>
-                  </td>
-                  <td className="project_progress">
-                    <div className="progress progress-sm">
-                      <div
-                        className="progress-bar bg-green"
-                        role="progressbar"
-                        aria-valuenow={57}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                        style={{ width: "57%" }}
-                      ></div>
-                    </div>
-                    <small>57% Complete</small>
-                  </td>
-                  <td className="project-state">
-                    <span className="badge badge-success">Success</span>
-                  </td>
-                  <td className="project-actions text-right">
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={handleShow}
-                    >
-                      <i className="fas fa-folder"></i>
-                      Ver
-                    </button>
-                    <a className="btn btn-info btn-sm" href="#">
-                      <i className="fas fa-pencil-alt"></i>
-                      Editar
-                    </a>
-                    <a className="btn btn-danger btn-sm" href="#">
-                      <i className="fas fa-trash"></i>
-                      Eliminar
-                    </a>
-                  </td>
-                </tr>
+                {proyects.map(
+                  (proyecto) =>
+                    // Verificar si el proyecto está activo
+                    proyecto.activo && (
+                      <tr key={proyecto.id}>
+                        <td>#</td>
+                        <td>
+                          <a style={{ fontSize: 18 }}>{proyecto.titulo}</a>
+                        </td>
+                        <td>
+                          <ul className="list-inline">
+                            <li className="list-inline-item">
+                              <a style={{ fontSize: 18 }}>
+                                {proyecto.fechaCreacion.split("T")[0]}
+                              </a>
+                            </li>
+                          </ul>
+                        </td>
+                        <td className="project_progress">
+                          <div className="progress progress-sm">
+                            <div
+                              className="progress-bar bg-green"
+                              role="progressbar"
+                              aria-valuenow={proyecto.progreso}
+                              aria-valuemin={0}
+                              aria-valuemax={100}
+                              style={{ width: `${proyecto.progreso}%` }}
+                            ></div>
+                          </div>
+                          <small>{`${proyecto.progreso}% Complete`}</small>
+                        </td>
+                        <td className="project-state">
+                          <span className="badge badge-success">
+                            {proyecto.estado}
+                          </span>
+                        </td>
+                        <td className="project-actions text-right">
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => handleShow(proyecto.proyectoId)}
+                          >
+                            <i className="fas fa-folder"></i>
+                            Ver
+                          </button>
+                          <a className="btn btn-info btn-sm" href="#">
+                            <i className="fas fa-pencil-alt"></i>
+                            Editar
+                          </a>
+                          <a className="btn btn-danger btn-sm" href="#">
+                            <i className="fas fa-trash"></i>
+                            Eliminar
+                          </a>
+                        </td>
+                      </tr>
+                    )
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </section>
-      <ModalProyect show={show} handleClose={handleClose} />
+      <ModalProyect
+        show={show}
+        handleClose={handleClose}
+        proyecto={proyectoSeleccionado}
+      />
     </>
   );
 }

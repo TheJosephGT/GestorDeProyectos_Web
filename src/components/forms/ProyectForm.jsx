@@ -1,34 +1,43 @@
 import React from "react";
 import { useState } from "react";
+import { postProyect } from "../../Repositorys/ProyectRepository";
+import { useNavigate } from "react-router-dom";
 
 function ProyectForm() {
-  const [venta, setVenta] = useState({
-    VentaId: 0,
-    Fecha: "",
-    ClienteId: 0,
-    Concepto: "",
-    VentaDetalle: [],
-    Ganancias: 0,
-  });
-  const [detalle, setDetalle] = useState({
-    Marca: "",
-    Color: "",
-    Size: "",
-    Cantidad: 0,
-    Precio: 0,
-  });
-  const [listaClientes, setListaClientes] = useState([]);
+  const navigate = useNavigate();
+  const initialState = {
+    id: 0,
+    titulo: "",
+    descripcion: "",
+    estado: "Activo",
+    fechaCreacion: "",
+    progreso: 0,
+    activo: true,
+    participantes: [],
+  };
+  const [proyect, setProyect] = useState(initialState);
 
-  const Guardar = () => {
-    // Lógica para guardar la venta
+  const handleInputChange = (event) => {
+    setProyect({ ...proyect, [event.target.name]: event.target.value });
   };
 
-  // Usuario de ejemplo
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await postProyect(proyect);
+      setProyect(initialState);
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const usuarioEjemplo = {
-    Nombre: "Ejemplo",
-    NickName: "ejemplo123",
-    Rol: "Administrador",
-    Correo: "ejemplo@example.com",
+    Nombre: "Juan Perez",
+    NickName: "JuanPerez",
+    Rol: "Desarrollador",
+    Correo: "sdas",
   };
 
   return (
@@ -46,12 +55,15 @@ function ProyectForm() {
           <div className="bg-white rounded-lg shadow-sm p-5 shadow-lg">
             <div className="tab-content">
               <div id="nav-tab-card" className="tab-pane fade show active">
-                <form role="form">
+                <form onSubmit={handleSubmit} role="form">
                   <div className="mb-3">
-                    <label className="form-label">Nombre del proyecto</label>
+                    <label className="form-label">Titulo</label>
                     <input
                       type="text"
-                      name="nickName"
+                      id="titulo"
+                      name="titulo"
+                      value={proyect.titulo}
+                      onChange={handleInputChange}
                       className="form-control"
                       minLength="2"
                       maxLength="50"
@@ -64,7 +76,10 @@ function ProyectForm() {
                     <label className="form-label">Descripción</label>
                     <textarea
                       type="text"
-                      name="nombreCompleto"
+                      id="descripcion"
+                      name="descripcion"
+                      value={proyect.descripcion}
+                      onChange={handleInputChange}
                       className="form-control"
                       placeholder="Ingrese su nombre completo"
                       min="1900"

@@ -1,17 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import { getProyects } from "../../Repositorys/ProyectRepository";
 
 function ProyectConsult() {
+  const [proyectos, setProyectos] = useState([]);
+  const [records, setRecords] = useState([]);
+
+  const listProyects = async () => {
+    try {
+      const data = await getProyects();
+      setProyectos(data);
+      const activeProyects = data.filter((proyecto) => proyecto.activo);
+      setRecords(activeProyects);
+    } catch (error) {
+      console.error("Error en ProyectConsult.listProyects:", error);
+    }
+  };
+  useEffect(() => {
+    listProyects();
+  }, []);
   const columns = [
     {
-      name: "Nombre",
-      selector: (row) => row.Nombre,
+      name: "Titulo",
+      selector: (row) => row.titulo,
       sortable: true,
     },
     {
       name: "Descripcion",
-      selector: (row) => row.Descripcion,
+      selector: (row) => row.descripcion,
       sortable: true,
+    },
+    {
+      name: "Tareas",
+      button: true,
+      cell: (row) => (
+        <button
+          className="btn btn-warning btn-sm"
+          onClick={() => handleEdit(row)}
+        >
+          Tareas
+        </button>
+      ),
     },
     {
       name: "Participantes",
@@ -21,7 +50,7 @@ function ProyectConsult() {
           className="btn btn-success btn-sm"
           onClick={() => handleEdit(row)}
         >
-          Ver
+          Participantes
         </button>
       ),
     },
@@ -51,31 +80,6 @@ function ProyectConsult() {
     },
   ];
 
-  const data = [
-    {
-      Nombre: "Juan Perez",
-      Descripcion: "juancito123",
-    },
-    {
-      Nombre: "María García",
-      Descripcion: "maria_g",
-    },
-    {
-      Nombre: "Carlos López",
-      Descripcion: "carlitos99",
-    },
-    {
-      Nombre: "Ana Martínez",
-      Descripcion: "anam",
-    },
-    {
-      Nombre: "Laura Rodríguez",
-      Descripcion: "lau_rdz",
-    },
-  ];
-
-  const [records, setRecords] = useState(data);
-
   const handleEdit = (row) => {
     // Lógica para editar el usuario
     console.log("Editar usuario:", row);
@@ -93,10 +97,10 @@ function ProyectConsult() {
 
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
-    const filteredData = data.filter((item) => {
+    const filteredData = proyectos.filter((item) => {
       return (
-        item.Nombre.toLowerCase().includes(searchValue) ||
-        item.Descripcion.toLowerCase().includes(searchValue)
+        item.nombre?.toLowerCase().includes(searchValue) ||
+        item.descripcion?.toLowerCase().includes(searchValue)
       );
     });
     setRecords(filteredData);
@@ -104,7 +108,7 @@ function ProyectConsult() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Gestionar proyectos</h1>
+      <h1 className="text-center">GESTIONAR PROYECTOS</h1>
       <div className="text-end">
         <input type="text" placeholder="Buscar" onChange={handleFilter}></input>
       </div>

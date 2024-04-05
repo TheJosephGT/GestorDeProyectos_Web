@@ -1,26 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import {
+  getUsuarios,
+  deleteUsuario,
+} from "../../Repositorys/UsuarioRepository";
+import { useNavigate } from "react-router-dom";
 
 function UserConsult() {
+  const navigate = useNavigate();
+  const [usuarios, setUsuarios] = useState([]);
+  const [records, setRecords] = useState([]);
+
+  const listUsuarios = async () => {
+    try {
+      const data = await getUsuarios();
+      setUsuarios(data);
+      const activeUsuarios = data.filter(
+        (usuario) => usuario.activo && usuario.rol !== "Administrador"
+      );
+      setRecords(activeUsuarios);
+    } catch (error) {
+      console.error("Error en UserConsult.listUsuarios:", error);
+    }
+  };
+  useEffect(() => {
+    listUsuarios();
+  }, []);
   const columns = [
     {
       name: "Nombre",
-      selector: (row) => row.Nombre,
+      selector: (row) => row.nombreCompleto,
       sortable: true,
     },
     {
       name: "NickName",
-      selector: (row) => row.NickName,
+      selector: (row) => row.nickName,
       sortable: true,
     },
     {
       name: "Rol",
-      selector: (row) => row.Rol,
+      selector: (row) => row.rol,
       sortable: true,
     },
     {
       name: "Correo",
-      selector: (row) => row.Correo,
+      selector: (row) => row.correo,
       sortable: true,
     },
     {
@@ -41,7 +65,7 @@ function UserConsult() {
       cell: (row) => (
         <button
           className="btn btn-primary btn-sm"
-          onClick={() => handleEdit(row)}
+          onClick={() => navigate(`/updateUser/${row.usuarioId}`)}
         >
           Editar
         </button>
@@ -53,7 +77,7 @@ function UserConsult() {
       cell: (row) => (
         <button
           className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row)}
+          onClick={() => handleDelete(row.usuarioId)}
         >
           Eliminar
         </button>
@@ -61,49 +85,18 @@ function UserConsult() {
     },
   ];
 
-  const data = [
-    {
-      Nombre: "Juan Perez",
-      NickName: "juancito123",
-      Rol: "Desarrollador",
-      Correo: "juan.perez@example.com",
-    },
-    {
-      Nombre: "María García",
-      NickName: "maria_g",
-      Rol: "Diseñadora",
-      Correo: "maria.garcia@example.com",
-    },
-    {
-      Nombre: "Carlos López",
-      NickName: "carlitos99",
-      Rol: "Gerente de Proyecto",
-      Correo: "carlos.lopez@example.com",
-    },
-    {
-      Nombre: "Ana Martínez",
-      NickName: "anam",
-      Rol: "Analista de Datos",
-      Correo: "ana.martinez@example.com",
-    },
-    {
-      Nombre: "Laura Rodríguez",
-      NickName: "lau_rdz",
-      Rol: "Marketing",
-      Correo: "laura.rodriguez@example.com",
-    },
-  ];
-
-  const [records, setRecords] = useState(data);
-
   const handleEdit = (row) => {
     // Lógica para editar el usuario
     console.log("Editar usuario:", row);
   };
 
-  const handleDelete = (row) => {
-    // Lógica para eliminar el usuario
-    console.log("Eliminar usuario:", row);
+  const handleDelete = async (id) => {
+    try {
+      await deleteUsuario(id);
+      listUsuarios();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleViewParticipants = (row) => {
@@ -113,12 +106,12 @@ function UserConsult() {
 
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
-    const filteredData = data.filter((item) => {
+    const filteredData = usuarios.filter((item) => {
       return (
-        item.Nombre.toLowerCase().includes(searchValue) ||
-        item.NickName.toLowerCase().includes(searchValue) ||
-        item.Rol.toLowerCase().includes(searchValue) ||
-        item.Correo.toLowerCase().includes(searchValue)
+        item.nombreCompleto.toLowerCase().includes(searchValue) ||
+        item.nickName.toLowerCase().includes(searchValue) ||
+        item.rol.toLowerCase().includes(searchValue) ||
+        item.correo.toLowerCase().includes(searchValue)
       );
     });
     setRecords(filteredData);
