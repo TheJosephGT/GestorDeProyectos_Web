@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import ModalProyect from "./ModalProyect";
 import React from "react";
 import { getProyects } from "../Repositorys/ProyectRepository";
+import { getUsuarios } from "../Repositorys/UsuarioRepository";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const [show, setShow] = useState(false);
@@ -9,6 +11,7 @@ function Dashboard() {
 
   const handleClose = () => setShow(false);
   const [proyects, setProyects] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
 
   const listProyects = async () => {
     try {
@@ -17,8 +20,18 @@ function Dashboard() {
       console.error(error);
     }
   };
+
+  const listUsers = async () => {
+    try {
+      setUsuarios(await getUsuarios());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     listProyects();
+    listUsers();
   }, []);
 
   const handleShow = (id) => {
@@ -28,6 +41,9 @@ function Dashboard() {
     setProyectoSeleccionado(proyectoActual);
     setShow(true);
   };
+
+  const proyectsActivos = proyects.filter((proyecto) => proyecto.activo);
+  const usersActivos = usuarios.filter((usuario) => usuario.activo);
   return (
     <>
       {/* Content Header (Page header) */}
@@ -51,15 +67,15 @@ function Dashboard() {
                 {/* small box */}
                 <div className="small-box bg-info">
                   <div className="inner">
-                    <h3>{proyects.length}</h3>
+                    <h3>{proyectsActivos.length}</h3>
                     <p>Proyectos registrados</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-bag" />
                   </div>
-                  <a href="#" className="small-box-footer">
+                  <Link to="/proyectConsult" className="small-box-footer">
                     Mas info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
@@ -83,15 +99,15 @@ function Dashboard() {
                 {/* small box */}
                 <div className="small-box bg-warning">
                   <div className="inner">
-                    <h3>44</h3>
+                    <h3>{usersActivos.length}</h3>
                     <p>Usuarios registrados</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-person-add" />
                   </div>
-                  <a href="#" className="small-box-footer">
+                  <Link to="userConsult" className="small-box-footer">
                     Mas info <i className="fas fa-arrow-circle-right" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* ./col */}
