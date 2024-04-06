@@ -1,12 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { postProyect } from "../../Repositorys/ProyectRepository";
+import {
+  postProyect,
+  getProyectById,
+  putProyect,
+} from "../../Repositorys/ProyectRepository";
 import { getUsuarios } from "../../Repositorys/UsuarioRepository";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ProyectItem from "./ProyectItem";
 
-function ProyectForm() {
+function UpdateProyectForm() {
   const navigate = useNavigate();
+  const params = useParams();
   const initialState = {
     id: 0,
     titulo: "",
@@ -65,8 +70,13 @@ function ProyectForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await postProyect(proyect);
-      setProyect(initialState);
+      if (!params.id) {
+        await postProyect(proyect);
+        setProyect(initialState);
+      } else {
+        await putProyect(params.id, proyect);
+      }
+
       navigate("/proyectConsult");
     } catch (error) {
       console.log(error);
@@ -83,8 +93,38 @@ function ProyectForm() {
     }
   };
 
+  const datosProyecto = async (proyectoId) => {
+    try {
+      const data = await getProyectById(proyectoId);
+      if (data) {
+        // Formatear la fecha
+        const formattedDate = new Date(data.fechaCreacion)
+          .toISOString()
+          .split("T")[0];
+        const newData = {
+          proyectoId: proyectoId,
+          titulo: data.titulo,
+          descripcion: data.descripcion,
+          estado: data.estado,
+          fechaCreacion: formattedDate,
+          progreso: data.progreso,
+          activo: data.activo,
+          participantes: data.participantes,
+        };
+        setProyect(newData);
+      } else {
+        console.error("No se encontró el proyecto");
+      }
+    } catch (error) {
+      console.error("Error en datosProyecto", error);
+    }
+  };
+
   useEffect(() => {
     listUsuarios();
+    if (params.id) {
+      datosProyecto(params.id);
+    }
   }, []);
 
   return (
@@ -100,5 +140,4 @@ function ProyectForm() {
     />
   );
 }
-
-export default ProyectForm;
+export default UpdateProyectForm;
