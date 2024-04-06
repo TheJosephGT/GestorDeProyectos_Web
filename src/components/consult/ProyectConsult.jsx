@@ -5,11 +5,23 @@ import {
   deleteProyect,
 } from "../../Repositorys/ProyectRepository";
 import { useNavigate } from "react-router-dom";
+import ModalProyect from "../ModalProyect";
 
 function ProyectConsult() {
   const navigate = useNavigate();
   const [proyectos, setProyectos] = useState([]);
   const [records, setRecords] = useState([]);
+
+  const [show, setShow] = useState(false);
+  const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null);
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    const proyectoActual = proyectos.find(
+      (proyecto) => proyecto.proyectoId === id
+    );
+    setProyectoSeleccionado(proyectoActual);
+    setShow(true);
+  };
 
   const listProyects = async () => {
     try {
@@ -53,7 +65,7 @@ function ProyectConsult() {
       cell: (row) => (
         <button
           className="btn btn-success btn-sm"
-          onClick={() => handleEdit(row)}
+          onClick={() => handleShow(row.proyectoId)}
         >
           Participantes
         </button>
@@ -131,6 +143,11 @@ function ProyectConsult() {
         striped
         pointerOnHover
         fixedHeader
+      />
+      <ModalProyect
+        show={show}
+        handleClose={handleClose}
+        proyecto={proyectoSeleccionado}
       />
     </div>
   );
