@@ -1,21 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import { useNavigate, useParams } from "react-router-dom";
+import { getTasksByProyectId } from "../../Repositorys/TaskRepository";
 
 function TaskConsult() {
+  const navigate = useNavigate();
+  const params = useParams();
+  const [tareas, setTareas] = useState([]);
+  const [records, setRecords] = useState([]);
+
+  const listTasks = async (proyectoId) => {
+    try {
+      const data = await getTasksByProyectId(proyectoId);
+      setTareas(data);
+      const activeTareas = data.filter((tarea) => tarea.activo);
+      setRecords(activeTareas);
+    } catch (error) {
+      console.error("Error en listTasks:", error);
+    }
+  };
+  useEffect(() => {
+    if (params.id) {
+      listTasks(params.id);
+    }
+  }, []);
+
   const columns = [
     {
       name: "Nombre",
-      selector: (row) => row.Nombre,
+      selector: (row) => row.nombre,
       sortable: true,
     },
     {
       name: "Descripcion",
-      selector: (row) => row.Descripcion,
+      selector: (row) => row.descripcion,
       sortable: true,
     },
     {
       name: "Prioridad",
-      selector: (row) => row.Prioridad,
+      selector: (row) => row.prioridad,
       sortable: true,
     },
     {
@@ -56,36 +79,6 @@ function TaskConsult() {
     },
   ];
 
-  const data = [
-    {
-      Nombre: "Juan Perez",
-      Descripcion: "juancito123",
-      Prioridad: "Alta",
-    },
-    {
-      Nombre: "María García",
-      Descripcion: "maria_g",
-      Prioridad: "Alta",
-    },
-    {
-      Nombre: "Carlos López",
-      Descripcion: "carlitos99",
-      Prioridad: "Alta",
-    },
-    {
-      Nombre: "Ana Martínez",
-      Descripcion: "anam",
-      Prioridad: "Alta",
-    },
-    {
-      Nombre: "Laura Rodríguez",
-      Descripcion: "lau_rdz",
-      Prioridad: "Alta",
-    },
-  ];
-
-  const [records, setRecords] = useState(data);
-
   const handleEdit = (row) => {
     // Lógica para editar el usuario
     console.log("Editar usuario:", row);
@@ -103,21 +96,28 @@ function TaskConsult() {
 
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
-    const filteredData = data.filter((item) => {
-      return (
-        item.Nombre.toLowerCase().includes(searchValue) ||
-        item.Descripcion.toLowerCase().includes(searchValue) ||
-        item.Prioridad.toLowerCase().includes(searchValue)
-      );
+    const filteredData = tareas.filter((item) => {
+      if (item.activo === true) {
+        return (
+          item.nombre.toLowerCase().includes(searchValue) ||
+          item.descripcion.toLowerCase().includes(searchValue) ||
+          item.prioridad.toLowerCase().includes(searchValue)
+        );
+      }
     });
     setRecords(filteredData);
   }
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Gestionar tareas</h1>
+      <h1 className="text-center">GESTIONAR TAREAS</h1>
       <div className="text-end">
         <input type="text" placeholder="Buscar" onChange={handleFilter}></input>
+      </div>
+      <div className="text-start">
+        <button className="btn btn-success btn-md" onClick={{}}>
+          Agregar
+        </button>
       </div>
       <DataTable
         columns={columns}

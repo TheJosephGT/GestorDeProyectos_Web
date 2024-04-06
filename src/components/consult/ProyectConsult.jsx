@@ -53,7 +53,7 @@ function ProyectConsult() {
       cell: (row) => (
         <button
           className="btn btn-warning btn-sm"
-          onClick={() => handleEdit(row)}
+          onClick={() => navigate(`/taskConsult/${row.proyectoId}`)}
         >
           Tareas
         </button>
@@ -109,11 +109,6 @@ function ProyectConsult() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleViewParticipants = (row) => {
-    // Lógica para ver participantes
-    console.log("Ver participantes:", row);
   };
 
   function handleFilter(event) {

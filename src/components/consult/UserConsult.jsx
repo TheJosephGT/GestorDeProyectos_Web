@@ -82,11 +82,6 @@ function UserConsult() {
     }
   };
 
-  const handleViewParticipants = (row) => {
-    // Lógica para ver participantes
-    console.log("Ver participantes:", row);
-  };
-
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
     const filteredData = usuarios.filter((item) => {
@@ -104,7 +99,7 @@ function UserConsult() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Gestionar Usuarios</h1>
+      <h1 className="text-center">GESTIONAR USUARIOS</h1>
       <div className="text-end">
         <input type="text" placeholder="Buscar" onChange={handleFilter}></input>
       </div>
