@@ -49,6 +49,7 @@ function ModalTaskUser({ show, handleClose, tarea, updateTasks }) {
       await putTask(tareaEditada.tareaId, nuevaListaTareas[tareaActualIndex]);
       handleClose();
       updateTasks();
+      window.location.reload();
     } catch (error) {
       console.error("Error en handleCompletar:", error);
     }

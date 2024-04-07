@@ -3,7 +3,11 @@ import { postUsuario } from "../../Repositorys/UsuarioRepository";
 import UserItem from "./UserItem";
 import { useNavigate } from "react-router-dom";
 import appFirebase from "../../credenciales";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 const auth = getAuth(appFirebase);
 
 function UserForm() {
@@ -42,6 +46,13 @@ function UserForm() {
         setUsuario(initialState);
       } else {
         alert("Las contraseñas no coinciden");
+      }
+
+      await signInWithEmailAndPassword(auth, "admin@gmail.com", "hola123");
+      if (usuario) {
+        console.log("Usuario logueado");
+      } else {
+        console.log("No se pudo loguear");
       }
       navigate("/userConsult");
     } catch (error) {

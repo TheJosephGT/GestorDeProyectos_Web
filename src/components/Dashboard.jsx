@@ -46,7 +46,13 @@ function Dashboard() {
 
   const proyectsActivos = proyects.filter((proyecto) => proyecto.activo);
   const usersActivos = usuarios.filter((usuario) => usuario.activo);
-  const tasksActivos = tasks.filter((task) => task.activo);
+  const tasksActivos = tasks.filter(
+    (task) =>
+      task.activo &&
+      proyectsActivos.some(
+        (proyecto) => proyecto.proyectoId === task.proyectoId
+      )
+  );
 
   const usuarioActual = usersActivos.find(
     (usuario) => usuario.correo === auth.currentUser.email

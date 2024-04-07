@@ -21,12 +21,6 @@ function TaskConsultUser() {
   const [show, setShow] = useState(false);
   const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
   const handleClose = () => setShow(false);
-  const handleShow = (id) => {
-    const tareaActual = tareas.find((tarea) => tarea.tareaId === id);
-    setTareaSeleccionada(tareaActual);
-    setShow(true);
-  };
-
   const listTasksUser = async () => {
     try {
       const allUsers = await getUsuarios();
@@ -37,11 +31,29 @@ function TaskConsultUser() {
         params.id,
         usuarioActual.usuarioId
       );
-      setTareas(data);
-      const activeTareas = data.filter((tarea) => tarea.activo);
-      setRecords(activeTareas);
+      if (Array.isArray(data)) {
+        setTareas(data);
+        const activeTareas = data.filter((tarea) => tarea.activo);
+        setRecords(activeTareas);
+      } else {
+        console.error("Los datos recibidos no son un array:", data);
+      }
     } catch (error) {
       console.error("Error en listTasks:", error);
+    }
+  };
+
+  const handleShow = (id) => {
+    if (Array.isArray(tareas)) {
+      const tareaActual = tareas.find((tarea) => tarea.tareaId === id);
+      if (tareaActual) {
+        setTareaSeleccionada(tareaActual);
+        setShow(true);
+      } else {
+        console.error("No se encontró la tarea con ID:", id);
+      }
+    } else {
+      console.error("El estado 'tareas' no es un array:", tareas);
     }
   };
   useEffect(() => {
