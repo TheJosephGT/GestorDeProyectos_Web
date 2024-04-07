@@ -5,6 +5,10 @@ import { getParticipantesProyecto } from "../../Repositorys/ProyectRepository.js
 import { useNavigate, useParams } from "react-router-dom";
 import TaskItem from "./TaskItem";
 
+import appFirebase from "../../credenciales";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(appFirebase);
+
 function TaskForm() {
   const navigate = useNavigate();
   const params = useParams();
@@ -89,16 +93,22 @@ function TaskForm() {
   }, []);
 
   return (
-    <TaskItem
-      handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
-      task={task}
-      handleUsuarioChange={handleUsuarioChange}
-      usuarios={usuarios}
-      usuarioSeleccionadoId={usuarioSeleccionadoId}
-      handleSeleccionarUsuario={handleSeleccionarUsuario}
-      handleEliminarParticipante={handleEliminarParticipante}
-    />
+    <>
+      {auth.currentUser.email === "admin@gmail.com" ? (
+        <TaskItem
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+          task={task}
+          handleUsuarioChange={handleUsuarioChange}
+          usuarios={usuarios}
+          usuarioSeleccionadoId={usuarioSeleccionadoId}
+          handleSeleccionarUsuario={handleSeleccionarUsuario}
+          handleEliminarParticipante={handleEliminarParticipante}
+        />
+      ) : (
+        <h1>No tienes permisos para acceder a esta página</h1>
+      )}
+    </>
   );
 }
 

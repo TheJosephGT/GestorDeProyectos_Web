@@ -46,17 +46,19 @@ function Navegacion() {
                 Inicio
               </Link>
             </li>
-            <li className="nav-item dropdown">
-              <Link
-                className="nav-link"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                to="/userForm"
-              >
-                Registrar usuarios
-              </Link>
-            </li>
+            {auth.currentUser.email === "admin@gmail.com" && (
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  to="/userForm"
+                >
+                  Registrar usuarios
+                </Link>
+              </li>
+            )}
             <li className="nav-item dropdown">
               <Link
                 className="nav-link"
@@ -68,17 +70,19 @@ function Navegacion() {
                 Gestionar usuarios
               </Link>
             </li>
-            <li className="nav-item dropdown">
-              <Link
-                className="nav-link"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                to="/proyectForm"
-              >
-                Registrar proyectos
-              </Link>
-            </li>
+            {auth.currentUser.email === "admin@gmail.com" && (
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  to="/proyectForm"
+                >
+                  Registrar proyectos
+                </Link>
+              </li>
+            )}
             <li className="nav-item dropdown">
               <Link
                 className="nav-link"

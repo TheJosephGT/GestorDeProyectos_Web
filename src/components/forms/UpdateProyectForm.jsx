@@ -9,6 +9,10 @@ import { getUsuarios } from "../../Repositorys/UsuarioRepository";
 import { useNavigate, useParams } from "react-router-dom";
 import ProyectItem from "./ProyectItem";
 
+import appFirebase from "../../credenciales";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(appFirebase);
+
 function UpdateProyectForm() {
   const navigate = useNavigate();
   const params = useParams();
@@ -128,16 +132,22 @@ function UpdateProyectForm() {
   }, []);
 
   return (
-    <ProyectItem
-      handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
-      proyect={proyect}
-      handleUsuarioChange={handleUsuarioChange}
-      usuarios={usuarios}
-      usuarioSeleccionadoId={usuarioSeleccionadoId}
-      handleSeleccionarUsuario={handleSeleccionarUsuario}
-      handleEliminarParticipante={handleEliminarParticipante}
-    />
+    <>
+      {auth.currentUser.email === "admin@gmail.com" ? (
+        <ProyectItem
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+          proyect={proyect}
+          handleUsuarioChange={handleUsuarioChange}
+          usuarios={usuarios}
+          usuarioSeleccionadoId={usuarioSeleccionadoId}
+          handleSeleccionarUsuario={handleSeleccionarUsuario}
+          handleEliminarParticipante={handleEliminarParticipante}
+        />
+      ) : (
+        <h1>No tienes permisos para acceder a esta página</h1>
+      )}
+    </>
   );
 }
 export default UpdateProyectForm;

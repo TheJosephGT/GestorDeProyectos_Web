@@ -5,6 +5,11 @@ import {
   getTasksByProyectId,
   deleteTask,
 } from "../../Repositorys/TaskRepository";
+import ColumnTaskUser from "./ColumnTaskUser";
+
+import appFirebase from "../../credenciales";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(appFirebase);
 
 function TaskConsult() {
   const navigate = useNavigate();
@@ -28,61 +33,64 @@ function TaskConsult() {
     }
   }, []);
 
-  const columns = [
-    {
-      name: "Nombre",
-      selector: (row) => row.nombre,
-      sortable: true,
-    },
-    {
-      name: "Descripcion",
-      selector: (row) => row.descripcion,
-      sortable: true,
-    },
-    {
-      name: "Prioridad",
-      selector: (row) => row.prioridad,
-      sortable: true,
-    },
-    {
-      name: "Participantes",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-success btn-sm"
-          onClick={() => handleEdit(row)}
-        >
-          Ver
-        </button>
-      ),
-    },
-    {
-      name: "Editar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() =>
-            navigate(`/updateTaskForm/${params.id}/${row.tareaId}`)
-          }
-        >
-          Editar
-        </button>
-      ),
-    },
-    {
-      name: "Eliminar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row.tareaId)}
-        >
-          Eliminar
-        </button>
-      ),
-    },
-  ];
+  const columns =
+    auth.currentUser.email === "admin@gmail.com"
+      ? [
+          {
+            name: "Nombre",
+            selector: (row) => row.nombre,
+            sortable: true,
+          },
+          {
+            name: "Descripcion",
+            selector: (row) => row.descripcion,
+            sortable: true,
+          },
+          {
+            name: "Prioridad",
+            selector: (row) => row.prioridad,
+            sortable: true,
+          },
+          {
+            name: "Participantes",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-success btn-sm"
+                onClick={() => handleEdit(row)}
+              >
+                Ver
+              </button>
+            ),
+          },
+          {
+            name: "Editar",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() =>
+                  navigate(`/updateTaskForm/${params.id}/${row.tareaId}`)
+                }
+              >
+                Editar
+              </button>
+            ),
+          },
+          {
+            name: "Eliminar",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDelete(row.tareaId)}
+              >
+                Eliminar
+              </button>
+            ),
+          },
+        ]
+      : ColumnTaskUser();
 
   const handleEdit = (row) => {
     // Lógica para editar el usuario
@@ -120,12 +128,14 @@ function TaskConsult() {
         <input type="text" placeholder="Buscar" onChange={handleFilter}></input>
       </div>
       <div className="text-start">
-        <button
-          className="btn btn-success btn-md"
-          onClick={() => navigate(`/taskForm/${params.id}`)}
-        >
-          Agregar
-        </button>
+        {auth.currentUser.email === "admin@gmail.com" && (
+          <button
+            className="btn btn-success btn-md"
+            onClick={() => navigate(`/taskForm/${params.id}`)}
+          >
+            Agregar
+          </button>
+        )}
       </div>
       <DataTable
         columns={columns}

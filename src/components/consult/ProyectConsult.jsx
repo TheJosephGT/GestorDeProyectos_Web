@@ -6,6 +6,11 @@ import {
 } from "../../Repositorys/ProyectRepository";
 import { useNavigate } from "react-router-dom";
 import ModalProyect from "../ModalProyect";
+import ProyectColumns from "./ColumnProyectUser";
+
+import appFirebase from "../../credenciales";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(appFirebase);
 
 function ProyectConsult() {
   const navigate = useNavigate();
@@ -36,66 +41,70 @@ function ProyectConsult() {
   useEffect(() => {
     listProyects();
   }, []);
-  const columns = [
-    {
-      name: "Titulo",
-      selector: (row) => row.titulo,
-      sortable: true,
-    },
-    {
-      name: "Descripcion",
-      selector: (row) => row.descripcion,
-      sortable: true,
-    },
-    {
-      name: "Tareas",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-warning btn-sm"
-          onClick={() => navigate(`/taskConsult/${row.proyectoId}`)}
-        >
-          Tareas
-        </button>
-      ),
-    },
-    {
-      name: "Participantes",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-success btn-sm"
-          onClick={() => handleShow(row.proyectoId)}
-        >
-          Participantes
-        </button>
-      ),
-    },
-    {
-      name: "Editar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => navigate(`/updateProyect/${row.proyectoId}`)}
-        >
-          Editar
-        </button>
-      ),
-    },
-    {
-      name: "Eliminar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row.proyectoId)}
-        >
-          Eliminar
-        </button>
-      ),
-    },
-  ];
+
+  const columns =
+    auth.currentUser.email === "admin@gmail.com"
+      ? [
+          {
+            name: "Titulo",
+            selector: (row) => row.titulo,
+            sortable: true,
+          },
+          {
+            name: "Descripcion",
+            selector: (row) => row.descripcion,
+            sortable: true,
+          },
+          {
+            name: "Tareas",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-warning btn-sm"
+                onClick={() => navigate(`/taskConsult/${row.proyectoId}`)}
+              >
+                Tareas
+              </button>
+            ),
+          },
+          {
+            name: "Participantes",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-success btn-sm"
+                onClick={() => handleShow(row.proyectoId)}
+              >
+                Participantes
+              </button>
+            ),
+          },
+          {
+            name: "Editar",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => navigate(`/updateProyect/${row.proyectoId}`)}
+              >
+                Editar
+              </button>
+            ),
+          },
+          {
+            name: "Eliminar",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDelete(row.proyectoId)}
+              >
+                Eliminar
+              </button>
+            ),
+          },
+        ]
+      : ProyectColumns();
 
   const handleDelete = async (id) => {
     try {

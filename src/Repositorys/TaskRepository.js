@@ -1,5 +1,11 @@
 const API_URL = "http://gestortareasapi.somee.com/api/tareas";
 
+export const getTasks = async () => {
+  const respuesta = await fetch(API_URL);
+  const data = (await respuesta).json();
+  return data;
+};
+
 export const getTasksByProyectId = async (proyectoId) => {
   const respuesta = await fetch(`${API_URL}/tareasporidproyecto/${proyectoId}`);
   const data = (await respuesta).json();

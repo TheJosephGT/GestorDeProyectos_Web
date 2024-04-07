@@ -49,12 +49,18 @@ function UserForm() {
     }
   };
   return (
-    <UserItem
-      handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
-      usuario={usuario}
-      confirmarContrasena={confirmarContrasena}
-    />
+    <>
+      {auth.currentUser.email === "admin@gmail.com" ? (
+        <UserItem
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+          usuario={usuario}
+          confirmarContrasena={confirmarContrasena}
+        />
+      ) : (
+        <h1>No tienes permisos para acceder a esta página</h1>
+      )}
+    </>
   );
 }
 

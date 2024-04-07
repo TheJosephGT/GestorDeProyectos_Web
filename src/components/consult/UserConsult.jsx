@@ -5,6 +5,11 @@ import {
   deleteUsuario,
 } from "../../Repositorys/UsuarioRepository";
 import { useNavigate } from "react-router-dom";
+import ColumnUserUser from "./ColumnUserUser";
+
+import appFirebase from "../../credenciales";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(appFirebase);
 
 function UserConsult() {
   const navigate = useNavigate();
@@ -26,52 +31,55 @@ function UserConsult() {
   useEffect(() => {
     listUsuarios();
   }, []);
-  const columns = [
-    {
-      name: "Nombre",
-      selector: (row) => row.nombreCompleto,
-      sortable: true,
-    },
-    {
-      name: "NickName",
-      selector: (row) => row.nickName,
-      sortable: true,
-    },
-    {
-      name: "Rol",
-      selector: (row) => row.rol,
-      sortable: true,
-    },
-    {
-      name: "Correo",
-      selector: (row) => row.correo,
-      sortable: true,
-    },
-    {
-      name: "Editar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => navigate(`/updateUser/${row.usuarioId}`)}
-        >
-          Editar
-        </button>
-      ),
-    },
-    {
-      name: "Eliminar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row.usuarioId)}
-        >
-          Eliminar
-        </button>
-      ),
-    },
-  ];
+  const columns =
+    auth.currentUser.email === "admin@gmail.com"
+      ? [
+          {
+            name: "Nombre",
+            selector: (row) => row.nombreCompleto,
+            sortable: true,
+          },
+          {
+            name: "NickName",
+            selector: (row) => row.nickName,
+            sortable: true,
+          },
+          {
+            name: "Rol",
+            selector: (row) => row.rol,
+            sortable: true,
+          },
+          {
+            name: "Correo",
+            selector: (row) => row.correo,
+            sortable: true,
+          },
+          {
+            name: "Editar",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => navigate(`/updateUser/${row.usuarioId}`)}
+              >
+                Editar
+              </button>
+            ),
+          },
+          {
+            name: "Eliminar",
+            button: true,
+            cell: (row) => (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleDelete(row.usuarioId)}
+              >
+                Eliminar
+              </button>
+            ),
+          },
+        ]
+      : ColumnUserUser();
 
   const handleDelete = async (id) => {
     try {
