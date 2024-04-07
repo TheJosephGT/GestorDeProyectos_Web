@@ -16,6 +16,14 @@ export const getProyectById = async (id) => {
   }
 };
 
+export const getParticipantesProyecto = async (proyectoId) => {
+  const respuesta = await fetch(
+    `${API_URL}/participantesproyecto/${proyectoId}`
+  );
+  const data = (await respuesta).json();
+  return data;
+};
+
 export const postProyect = async (proyect) => {
   try {
     const requestBody = {

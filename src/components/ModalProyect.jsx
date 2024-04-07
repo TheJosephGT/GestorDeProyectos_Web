@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { getUsuarios } from "./../Repositorys/UsuarioRepository";
 
-function ModalProyect({ show, handleClose, proyecto }) {
+function ModalProyect({ show, handleClose, proyecto, tarea }) {
   const [usuarios, setUsuarios] = useState([]);
 
   const listUsuarios = async () => {
@@ -19,11 +19,15 @@ function ModalProyect({ show, handleClose, proyecto }) {
   useEffect(() => {
     listUsuarios();
   }, []);
-  if (!proyecto) return null;
+
+  const data = proyecto || tarea;
+
+  if (!data) return null;
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>{proyecto.titulo}</Modal.Title>
+        <Modal.Title>{data.titulo || data.nombre}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {" "}
@@ -41,7 +45,7 @@ function ModalProyect({ show, handleClose, proyecto }) {
               </tr>
             </thead>
             <tbody>
-              {proyecto.participantes.map((participante) => {
+              {data.participantes.map((participante) => {
                 const usuarioSeleccionado = usuarios.find(
                   (usuario) =>
                     usuario.usuarioId === participante.usuarioId &&

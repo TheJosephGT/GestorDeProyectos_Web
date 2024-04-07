@@ -1,16 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { postTask } from "../../Repositorys/TaskRepository.js";
+import {
+  postTask,
+  getTaskById,
+  putTask,
+} from "../../Repositorys/TaskRepository.js";
 import { getParticipantesProyecto } from "../../Repositorys/ProyectRepository.js";
 import { useNavigate, useParams } from "react-router-dom";
 import TaskItem from "./TaskItem";
 
-function TaskForm() {
+function UpdateTaskForm() {
   const navigate = useNavigate();
   const params = useParams();
   const initialState = {
     id: 0,
-    proyectoId: params.id,
+    proyectoId: params.proyectoId,
     nombre: "",
     descripcion: "",
     estado: "Activo",
@@ -66,8 +70,13 @@ function TaskForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await postTask(task);
-      setTask(initialState);
+      if (!params.id) {
+        await postTask(task);
+        setTask(initialState);
+      } else {
+        await putTask(params.id, task);
+      }
+
       navigate("/proyectConsult");
     } catch (error) {
       console.log(error);
@@ -76,7 +85,7 @@ function TaskForm() {
 
   const listUsuarios = async () => {
     try {
-      const data = await getParticipantesProyecto(params.id);
+      const data = await getParticipantesProyecto(params.proyectoId);
       const activeUsers = data.filter((usuario) => usuario.activo);
       setUsuarios(activeUsers);
     } catch (error) {
@@ -84,8 +93,34 @@ function TaskForm() {
     }
   };
 
+  const datosTarea = async (tareaId) => {
+    try {
+      const data = await getTaskById(tareaId);
+      if (data) {
+        const newData = {
+          tareaId: tareaId,
+          proyectoId: data.proyectoId,
+          nombre: data.nombre,
+          descripcion: data.descripcion,
+          estado: data.estado,
+          prioridad: data.prioridad,
+          activo: data.activo,
+          participantes: data.participantes,
+        };
+        setTask(newData);
+      } else {
+        console.error("No se encontró el proyecto");
+      }
+    } catch (error) {
+      console.error("Error en datosProyecto", error);
+    }
+  };
+
   useEffect(() => {
     listUsuarios();
+    if (params.id) {
+      datosTarea(params.id);
+    }
   }, []);
 
   return (
@@ -102,4 +137,4 @@ function TaskForm() {
   );
 }
 
-export default TaskForm;
+export default UpdateTaskForm;

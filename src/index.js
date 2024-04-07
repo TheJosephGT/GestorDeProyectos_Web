@@ -9,13 +9,14 @@ import Navegacion from "./navBar/Navegacion";
 import Dashboard from "./components/Dashboard";
 import UserForm from "./components/forms/UserForm";
 import ProyectForm from "./components/forms/ProyectForm";
-import TaskFrom from "./components/forms/TaskForm";
 import UserConsult from "./components/consult/UserConsult";
 import ProyectConsult from "./components/consult/ProyectConsult";
 import TaskConsult from "./components/consult/TaskConsult";
 import Login from "./components/Login";
 import UpdateProyectForm from "./components/forms/UpdateProyectForm";
 import UpdateUserForm from "./components/forms/UpdateUserForm";
+import TaskForm from "./components/forms/TaskForm";
+import UpdateTaskForm from "./components/forms/UpdateTaskForm";
 
 // Importando los modulos de firebase
 import appFirebase from "./credenciales";
@@ -52,7 +53,11 @@ const App = () => {
             <Route path="/updateUser/:id" element={<UpdateUserForm />} />
             <Route path="/proyectForm" element={<ProyectForm />} />
             <Route path="/updateProyect/:id" element={<UpdateProyectForm />} />
-            <Route path="/taskForm" element={<TaskFrom />} />
+            <Route path="/taskForm/:id" element={<TaskForm />} />
+            <Route
+              path="/updateTaskForm/:proyectoId/:id"
+              element={<UpdateTaskForm />}
+            />
             <Route path="/userConsult" element={<UserConsult />} />
             <Route path="/proyectConsult" element={<ProyectConsult />} />
             <Route path="/taskConsult/:id" element={<TaskConsult />} />

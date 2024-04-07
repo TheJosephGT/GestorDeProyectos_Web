@@ -59,7 +59,9 @@ function TaskConsult() {
       cell: (row) => (
         <button
           className="btn btn-primary btn-sm"
-          onClick={() => handleEdit(row)}
+          onClick={() =>
+            navigate(`/updateTaskForm/${params.id}/${row.tareaId}`)
+          }
         >
           Editar
         </button>
@@ -115,7 +117,10 @@ function TaskConsult() {
         <input type="text" placeholder="Buscar" onChange={handleFilter}></input>
       </div>
       <div className="text-start">
-        <button className="btn btn-success btn-md" onClick={{}}>
+        <button
+          className="btn btn-success btn-md"
+          onClick={() => navigate(`/taskForm/${params.id}`)}
+        >
           Agregar
         </button>
       </div>

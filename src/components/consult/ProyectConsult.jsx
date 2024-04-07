@@ -97,11 +97,6 @@ function ProyectConsult() {
     },
   ];
 
-  const handleEdit = (row) => {
-    // Lógica para editar el usuario
-    console.log("Editar usuario:", row);
-  };
-
   const handleDelete = async (id) => {
     try {
       await deleteProyect(id);
