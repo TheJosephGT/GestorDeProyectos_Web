@@ -5,6 +5,10 @@ import { getUsuarios } from "../Repositorys/UsuarioRepository";
 import { getTasks } from "../Repositorys/TaskRepository";
 import { Link } from "react-router-dom";
 
+import appFirebase from "./../credenciales";
+import { getAuth } from "firebase/auth";
+const auth = getAuth(appFirebase);
+
 function Dashboard() {
   const [proyects, setProyects] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
@@ -43,6 +47,23 @@ function Dashboard() {
   const proyectsActivos = proyects.filter((proyecto) => proyecto.activo);
   const usersActivos = usuarios.filter((usuario) => usuario.activo);
   const tasksActivos = tasks.filter((task) => task.activo);
+
+  const usuarioActual = usersActivos.find(
+    (usuario) => usuario.correo === auth.currentUser.email
+  );
+  console.log(usuarioActual);
+  const tareasPendientes = tasks.filter((task) => {
+    // Verifica si la tarea está activa y si el usuarioActual está incluido en la lista de participantes de la tarea
+    return (
+      task.activo &&
+      task.participantes.some(
+        (participante) => participante.usuarioId === usuarioActual.usuarioId
+      ) &&
+      proyectsActivos.some(
+        (proyecto) => proyecto.proyectoId === task.proyectoId
+      )
+    );
+  });
   return (
     <>
       <div className="content-header">
@@ -103,7 +124,7 @@ function Dashboard() {
               <div className="col-lg-3 col-6">
                 <div className="small-box bg-danger">
                   <div className="inner">
-                    <h3>53</h3>
+                    <h3>{tareasPendientes.length}</h3>
                     <p>Tareas pendientes</p>
                   </div>
                   <div className="icon">
