@@ -3,30 +3,28 @@ import DataTable from "react-data-table-component";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getTasksByProyectId,
-  deleteTask,
   getTasksByUsuarioIdAndProyectId,
 } from "../../Repositorys/TaskRepository";
 import { getUsuarios } from "../../Repositorys/UsuarioRepository";
+import ModalTaskUser from "../ModalTaskUser";
 
 import appFirebase from "../../credenciales";
 import { getAuth } from "firebase/auth";
 const auth = getAuth(appFirebase);
 
-function TaskConsult() {
+function TaskConsultUser() {
   const navigate = useNavigate();
   const params = useParams();
   const [tareas, setTareas] = useState([]);
   const [records, setRecords] = useState([]);
 
-  const listTasks = async (proyectoId) => {
-    try {
-      const data = await getTasksByProyectId(proyectoId);
-      setTareas(data);
-      const activeTareas = data.filter((tarea) => tarea.activo);
-      setRecords(activeTareas);
-    } catch (error) {
-      console.error("Error en listTasks:", error);
-    }
+  const [show, setShow] = useState(false);
+  const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    const tareaActual = tareas.find((tarea) => tarea.tareaId === id);
+    setTareaSeleccionada(tareaActual);
+    setShow(true);
   };
 
   const listTasksUser = async () => {
@@ -48,9 +46,7 @@ function TaskConsult() {
   };
   useEffect(() => {
     if (params.id) {
-      if (auth.currentUser.email === "admin@gmail.com") {
-        listTasks(params.id);
-      } else {
+      if (auth.currentUser.email !== "admin@gmail.com") {
         listTasksUser();
       }
     }
@@ -73,60 +69,18 @@ function TaskConsult() {
       sortable: true,
     },
     {
-      name: "Participantes",
+      name: "Marcar",
       button: true,
       cell: (row) => (
         <button
           className="btn btn-success btn-sm"
-          onClick={() => handleEdit(row)}
+          onClick={() => handleShow(row.tareaId)}
         >
-          Ver
-        </button>
-      ),
-    },
-    {
-      name: "Editar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() =>
-            navigate(`/updateTaskForm/${params.id}/${row.tareaId}`)
-          }
-        >
-          Editar
-        </button>
-      ),
-    },
-    {
-      name: "Eliminar",
-      button: true,
-      cell: (row) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row.tareaId)}
-        >
-          Eliminar
+          Completar
         </button>
       ),
     },
   ];
-
-  const handleEdit = (row) => {
-    // Lógica para editar el usuario
-    console.log("Editar usuario:", row);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteTask(id);
-      listTasks();
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   function handleFilter(event) {
     const searchValue = event.target.value.toLowerCase();
     const filteredData = tareas.filter((item) => {
@@ -166,8 +120,14 @@ function TaskConsult() {
         pointerOnHover
         fixedHeader
       />
+      <ModalTaskUser
+        show={show}
+        handleClose={handleClose}
+        tarea={tareaSeleccionada}
+        updateTasks={listTasksUser}
+      />
     </div>
   );
 }
 
-export default TaskConsult;
+export default TaskConsultUser;

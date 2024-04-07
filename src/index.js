@@ -17,6 +17,7 @@ import UpdateProyectForm from "./components/forms/UpdateProyectForm";
 import UpdateUserForm from "./components/forms/UpdateUserForm";
 import TaskForm from "./components/forms/TaskForm";
 import UpdateTaskForm from "./components/forms/UpdateTaskForm";
+import TaskConsultUser from "./components/consult/TaskConsultUser";
 
 // Importando los modulos de firebase
 import appFirebase from "./credenciales";
@@ -58,6 +59,7 @@ const App = () => {
               path="/updateTaskForm/:proyectoId/:id"
               element={<UpdateTaskForm />}
             />
+            <Route path="/taskConsultUser/:id" element={<TaskConsultUser />} />
             <Route path="/userConsult" element={<UserConsult />} />
             <Route path="/proyectConsult" element={<ProyectConsult />} />
             <Route path="/taskConsult/:id" element={<TaskConsult />} />

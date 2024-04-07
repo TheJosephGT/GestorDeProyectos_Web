@@ -20,7 +20,7 @@ function ColumnProyectUser() {
       cell: (row) => (
         <button
           className="btn btn-warning btn-sm"
-          onClick={() => navigate(`/taskConsult/${row.proyectoId}`)}
+          onClick={() => navigate(`/taskConsultUser/${row.proyectoId}`)}
         >
           Tareas
         </button>
