@@ -12,6 +12,17 @@ export const getTasksByProyectId = async (proyectoId) => {
   return data;
 };
 
+export const getTasksByUsuarioIdAndProyectId = async (
+  proyectoId,
+  usuarioId
+) => {
+  const respuesta = await fetch(
+    `${API_URL}/tareasbyidusuario/${usuarioId}/${proyectoId}`
+  );
+  const data = (await respuesta).json();
+  return data;
+};
+
 export const postTask = async (task) => {
   try {
     const requestBody = {

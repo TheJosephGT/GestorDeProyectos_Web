@@ -4,8 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   getTasksByProyectId,
   deleteTask,
+  getTasksByUsuarioIdAndProyectId,
 } from "../../Repositorys/TaskRepository";
 import ColumnTaskUser from "./ColumnTaskUser";
+import { getUsuarios } from "../../Repositorys/UsuarioRepository";
 
 import appFirebase from "../../credenciales";
 import { getAuth } from "firebase/auth";
@@ -27,9 +29,31 @@ function TaskConsult() {
       console.error("Error en listTasks:", error);
     }
   };
+
+  const listTasksUser = async () => {
+    try {
+      const allUsers = await getUsuarios();
+      const usuarioActual = allUsers.find(
+        (usuario) => usuario.correo === auth.currentUser.email
+      );
+      const data = await getTasksByUsuarioIdAndProyectId(
+        params.id,
+        usuarioActual.usuarioId
+      );
+      setTareas(data);
+      const activeTareas = data.filter((tarea) => tarea.activo);
+      setRecords(activeTareas);
+    } catch (error) {
+      console.error("Error en listTasks:", error);
+    }
+  };
   useEffect(() => {
     if (params.id) {
-      listTasks(params.id);
+      if (auth.currentUser.email === "admin@gmail.com") {
+        listTasks(params.id);
+      } else {
+        listTasksUser();
+      }
     }
   }, []);
 

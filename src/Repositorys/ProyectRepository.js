@@ -6,6 +6,12 @@ export const getProyects = async () => {
   return data;
 };
 
+export const getProyectsByIdUsuario = async (usuarioId) => {
+  const respuesta = await fetch(`${API_URL}/proyectosbyidusuario/${usuarioId}`);
+  const data = (await respuesta).json();
+  return data;
+};
+
 export const getProyectById = async (id) => {
   try {
     const respuesta = await fetch(`${API_URL}/${id}`);

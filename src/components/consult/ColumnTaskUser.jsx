@@ -17,6 +17,15 @@ function ColumnTaskUser() {
       selector: (row) => row.prioridad,
       sortable: true,
     },
+    {
+      name: "Marcar",
+      button: true,
+      cell: (row) => (
+        <button className="btn btn-success btn-sm" onClick={{}}>
+          Completar
+        </button>
+      ),
+    },
   ];
 }
 

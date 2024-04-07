@@ -59,17 +59,19 @@ function Navegacion() {
                 </Link>
               </li>
             )}
-            <li className="nav-item dropdown">
-              <Link
-                className="nav-link"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                to="/userConsult"
-              >
-                Gestionar usuarios
-              </Link>
-            </li>
+            {auth.currentUser.email === "admin@gmail.com" && (
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  to="/userConsult"
+                >
+                  Gestionar usuarios
+                </Link>
+              </li>
+            )}
             {auth.currentUser.email === "admin@gmail.com" && (
               <li className="nav-item dropdown">
                 <Link

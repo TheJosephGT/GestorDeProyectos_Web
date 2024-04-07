@@ -3,7 +3,9 @@ import DataTable from "react-data-table-component";
 import {
   getProyects,
   deleteProyect,
+  getProyectsByIdUsuario,
 } from "../../Repositorys/ProyectRepository";
+import { getUsuarios } from "../../Repositorys/UsuarioRepository";
 import { useNavigate } from "react-router-dom";
 import ModalProyect from "../ModalProyect";
 import ProyectColumns from "./ColumnProyectUser";
@@ -38,8 +40,27 @@ function ProyectConsult() {
       console.error("Error en ProyectConsult.listProyects:", error);
     }
   };
+
+  const listProyectsUser = async () => {
+    try {
+      const allUsers = await getUsuarios();
+      const usuarioActual = allUsers.find(
+        (usuario) => usuario.correo === auth.currentUser.email
+      );
+      const data = await getProyectsByIdUsuario(usuarioActual.usuarioId);
+      setProyectos(data);
+      const activeProyects = data.filter((proyecto) => proyecto.activo);
+      setRecords(activeProyects);
+    } catch (error) {
+      console.error("Error en ProyectConsult.listProyects:", error);
+    }
+  };
   useEffect(() => {
-    listProyects();
+    if (auth.currentUser.email === "admin@gmail.com") {
+      listProyects();
+    } else {
+      listProyectsUser();
+    }
   }, []);
 
   const columns =
