@@ -14,7 +14,7 @@ function TaskForm() {
     nombre: "",
     descripcion: "",
     estado: "Activo",
-    prioridad: "",
+    prioridad: "Alta",
     activo: true,
     participantes: [],
   };
