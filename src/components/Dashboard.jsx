@@ -58,18 +58,21 @@ function Dashboard() {
     (usuario) => usuario.correo === auth.currentUser.email
   );
   console.log(usuarioActual);
-  const tareasPendientes = tasks.filter((task) => {
-    // Verifica si la tarea está activa y si el usuarioActual está incluido en la lista de participantes de la tarea
-    return (
-      task.activo &&
-      task.participantes.some(
-        (participante) => participante.usuarioId === usuarioActual.usuarioId
-      ) &&
-      proyectsActivos.some(
-        (proyecto) => proyecto.proyectoId === task.proyectoId
-      )
-    );
-  });
+  // Verifica si usuarioActual está definido antes de acceder a sus propiedades
+  const tareasPendientes = usuarioActual
+    ? tasks.filter((task) => {
+        // Verifica si la tarea está activa y si el usuarioActual está incluido en la lista de participantes de la tarea
+        return (
+          task.activo &&
+          task.participantes.some(
+            (participante) => participante.usuarioId === usuarioActual.usuarioId
+          ) &&
+          proyectsActivos.some(
+            (proyecto) => proyecto.proyectoId === task.proyectoId
+          )
+        );
+      })
+    : [];
   return (
     <>
       <div className="content-header">
